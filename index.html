@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Todd — Your Workout Accountant</title>
+<meta name="description" content="Say your workout out loud. Todd files it into clean, organized logs — sets, reps, weight, miles, and steps, all accounted for.">
+<link rel="icon" href='data:image/svg+xml,<svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg"><rect width="80" height="80" rx="14" fill="%23F7F7F7"/><path d="M16 27 Q23 24 30 27" stroke="%23000" stroke-width="2.5" fill="none" stroke-linecap="round"/><path d="M50 27 Q57 24 64 27" stroke="%23000" stroke-width="2.5" fill="none" stroke-linecap="round"/><rect x="0" y="40.5" width="7" height="3" fill="%23000"/><rect x="7" y="33.5" width="24" height="17" fill="none" stroke="%23000" stroke-width="2"/><rect x="31" y="40.5" width="18" height="3" fill="%23000"/><rect x="49" y="33.5" width="24" height="17" fill="none" stroke="%23000" stroke-width="2"/><rect x="73" y="40.5" width="7" height="3" fill="%23000"/><path d="M15 44 Q19 40 23 44" stroke="%23000" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M57 44 Q61 40 65 44" stroke="%23000" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M28 56 Q40 67 52 56" stroke="%23000" stroke-width="2.6" fill="none" stroke-linecap="round"/></svg>'>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0B0D0B; --bg2:#101310; --text:#F2F1EA; --dim:rgba(242,241,234,.62);
+    --faint:rgba(242,241,234,.38); --accent:#8FB98F; --deep:#5C7A5C;
+    --card:rgba(255,255,255,.04); --line:rgba(255,255,255,.08); --radius:18px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--text);font-family:'Inter',-apple-system,sans-serif;
+       line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  h1,h2,h3{font-family:'Fraunces',Georgia,serif;font-weight:600;line-height:1.12;letter-spacing:-.01em}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+
+  /* Nav */
+  nav{position:fixed;top:0;left:0;right:0;z-index:50;transition:background .3s,border-color .3s;
+      border-bottom:1px solid transparent}
+  nav.scrolled{background:rgba(11,13,11,.85);backdrop-filter:blur(14px);border-color:var(--line)}
+  .nav-inner{display:flex;align-items:center;justify-content:space-between;height:64px}
+  .logo{display:flex;align-items:center;gap:10px;font-family:'Fraunces',serif;font-size:1.3rem;font-weight:700}
+  .logo svg{width:30px;height:30px}
+  .nav-links{display:flex;align-items:center;gap:28px;font-size:.9rem;color:var(--dim)}
+  .nav-links a:hover{color:var(--text)}
+  .btn{display:inline-flex;align-items:center;gap:8px;background:var(--deep);color:#fff;
+       padding:9px 18px;border-radius:99px;font-weight:600;font-size:.9rem;
+       transition:transform .2s,background .2s}
+  .btn:hover{background:#6b8c6b;transform:translateY(-1px)}
+  .btn.big{padding:15px 28px;font-size:1rem}
+  .btn.ghost{background:transparent;border:1px solid var(--line);color:var(--dim)}
+  .btn.ghost:hover{color:var(--text);border-color:var(--faint);background:var(--card)}
+
+  /* Hero */
+  .hero{padding:160px 0 90px;text-align:center;position:relative}
+  .hero::before{content:"";position:absolute;top:-200px;left:50%;transform:translateX(-50%);
+    width:900px;height:600px;background:radial-gradient(ellipse at center,rgba(92,122,92,.16),transparent 65%);
+    pointer-events:none}
+  .eyebrow{font-size:.78rem;font-weight:600;letter-spacing:.18em;color:var(--accent);text-transform:uppercase}
+  .hero h1{font-size:clamp(2.6rem,6.5vw,4.4rem);margin:18px 0 20px}
+  .hero h1 em{font-style:italic;color:var(--accent)}
+  .hero .sub{font-size:1.15rem;color:var(--dim);max-width:560px;margin:0 auto 36px}
+  .hero-ctas{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+  .todd-hero{width:120px;height:120px;margin:0 auto 28px;animation:float 5s ease-in-out infinite}
+  @keyframes float{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-12px) rotate(2deg)}}
+
+  /* Ledger demo card */
+  .ledger{max-width:520px;margin:64px auto 0;text-align:left}
+  .bubble{background:var(--card);border:1px solid var(--line);border-radius:20px 20px 20px 6px;
+          padding:14px 18px;font-size:.95rem;color:var(--dim);width:fit-content;max-width:90%}
+  .bubble .mic{color:var(--accent);margin-right:6px}
+  /* Demo log card — mirrors the app's real workout card: set rows in a
+     Set # · Weight · Reps grid with a shared Rest row, and labeled
+     Total Distance / Duration / Pace / Steps rows for cardio. */
+  .ledger-card{margin-top:14px;background:#0F120F;border:1px solid var(--line);border-radius:var(--radius);
+               padding:18px 20px;box-shadow:0 20px 60px rgba(0,0,0,.35)}
+  .log-head{display:flex;justify-content:space-between;align-items:baseline;padding-bottom:12px}
+  .log-title{font-weight:700;font-size:1.12rem}
+  .log-date{font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--faint)}
+  .exercise{padding:12px 0;border-top:1px solid var(--line)}
+  .ex-name{font-weight:600;font-size:.98rem;margin-bottom:8px}
+  .srow{display:grid;grid-template-columns:96px 1fr 1fr;gap:12px;font-size:.85rem;padding:2.5px 0}
+  .srow.kv{grid-template-columns:130px 1fr}
+  .srow .sl{color:rgba(242,241,234,.4)}
+  .srow .sv{color:rgba(242,241,234,.78)}
+
+  /* Sections */
+  section{padding:96px 0}
+  .sec-head{text-align:center;max-width:620px;margin:0 auto 56px}
+  .sec-head h2{font-size:clamp(1.9rem,4vw,2.7rem);margin:14px 0 14px}
+  .sec-head p{color:var(--dim)}
+
+  /* Features */
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  .feature{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+           padding:28px 24px;transition:transform .25s,border-color .25s,background .25s}
+  .feature:hover{transform:translateY(-4px);border-color:rgba(143,185,143,.35);background:rgba(255,255,255,.06)}
+  .feature .ico{font-size:1.6rem;margin-bottom:14px;display:block}
+  .feature h3{font-family:'Inter',sans-serif;font-size:1.05rem;font-weight:700;margin-bottom:8px}
+  .feature p{font-size:.92rem;color:var(--dim)}
+
+  /* Pricing */
+  #pricing{background:var(--bg2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .plans{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;align-items:stretch}
+  .plan{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+        padding:32px 26px;text-align:center;position:relative;transition:transform .25s,border-color .25s}
+  .plan:hover{transform:translateY(-4px)}
+  .plan.best{border-color:var(--deep);background:rgba(92,122,92,.10)}
+  .badge{position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:var(--deep);
+         color:#fff;font-size:.7rem;font-weight:700;letter-spacing:.12em;padding:5px 14px;border-radius:99px}
+  .plan .period{font-size:.85rem;color:var(--faint);text-transform:uppercase;letter-spacing:.1em;font-weight:600}
+  .plan .price{font-family:'Fraunces',serif;font-size:2.6rem;font-weight:700;margin:10px 0 4px}
+  .plan .per{color:var(--dim);font-size:.9rem;margin-bottom:18px}
+  .plan .note{font-size:.85rem;color:var(--dim)}
+  .pricing-foot{text-align:center;color:var(--faint);font-size:.85rem;margin-top:28px}
+
+  /* FAQ */
+  .faq-list{max-width:720px;margin:0 auto}
+  .qa{border-bottom:1px solid var(--line)}
+  .qa button{width:100%;background:none;border:none;color:var(--text);font-family:'Inter',sans-serif;
+             font-size:1.02rem;font-weight:600;text-align:left;padding:22px 40px 22px 4px;cursor:pointer;position:relative}
+  .qa button::after{content:"+";position:absolute;right:8px;top:50%;transform:translateY(-50%);
+                    font-size:1.4rem;font-weight:400;color:var(--accent);transition:transform .25s}
+  .qa.open button::after{transform:translateY(-50%) rotate(45deg)}
+  .qa .a{max-height:0;overflow:hidden;transition:max-height .35s ease;color:var(--dim);font-size:.95rem}
+  .qa.open .a{max-height:400px}
+  .qa .a p{padding:0 4px 22px}
+  .faq-more{text-align:center;margin-top:34px}
+  .faq-more a{color:var(--accent);font-weight:600}
+  .faq-more a:hover{text-decoration:underline}
+
+  /* Footer */
+  footer{border-top:1px solid var(--line);padding:56px 0 40px;background:var(--bg2)}
+  .foot{display:flex;justify-content:space-between;align-items:flex-start;gap:32px;flex-wrap:wrap}
+  .foot .brand{display:flex;align-items:center;gap:10px;font-family:'Fraunces',serif;font-weight:700;font-size:1.15rem}
+  .foot .brand svg{width:26px;height:26px}
+  .foot .tag{color:var(--faint);font-size:.85rem;margin-top:8px}
+  .foot-links{display:flex;gap:26px;font-size:.9rem;color:var(--dim);flex-wrap:wrap}
+  .foot-links a:hover{color:var(--text)}
+  .copyright{margin-top:36px;font-size:.8rem;color:var(--faint)}
+
+  /* Reveal animation */
+  .reveal{opacity:0;transform:translateY(22px);transition:opacity .6s ease,transform .6s ease}
+  .reveal.visible{opacity:1;transform:none}
+
+  @media (max-width:820px){
+    .grid,.plans{grid-template-columns:1fr}
+    .nav-links{display:none}
+    section{padding:64px 0}
+    .hero{padding:130px 0 60px}
+  }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <!-- Todd's neutral face — traced from the app's ToddMoodFaceIcon
+         (.neutral): off-white rounded-square head, arch brows, ^‿^
+         eyes behind square-lens glasses, subtle friendly smile. -->
+    <g id="todd-face">
+      <rect width="80" height="80" rx="14" fill="#F7F7F7"/>
+      <path d="M16 27 Q23 24 30 27" stroke="#000" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      <path d="M50 27 Q57 24 64 27" stroke="#000" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      <rect x="0" y="40.5" width="7" height="3" fill="#000"/>
+      <rect x="7" y="33.5" width="24" height="17" fill="none" stroke="#000" stroke-width="2"/>
+      <rect x="31" y="40.5" width="18" height="3" fill="#000"/>
+      <rect x="49" y="33.5" width="24" height="17" fill="none" stroke="#000" stroke-width="2"/>
+      <rect x="73" y="40.5" width="7" height="3" fill="#000"/>
+      <path d="M15 44 Q19 40 23 44" stroke="#000" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <path d="M57 44 Q61 40 65 44" stroke="#000" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <path d="M28 56 Q40 67 52 56" stroke="#000" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+    </g>
+  </defs>
+</svg>
+
+<nav id="nav">
+  <div class="wrap nav-inner">
+    <a class="logo" href="index.html">
+      <svg viewBox="0 0 80 80"><use href="#todd-face"/></svg> Todd
+    </a>
+    <div class="nav-links">
+      <a href="#features">Features</a>
+      <a href="#pricing">Pricing</a>
+      <a href="faq.html">FAQ</a>
+      <a href="privacy.html">Privacy</a>
+      <a href="terms.html">Terms</a>
+    </div>
+    <a class="btn" href="#download">Get Todd</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <svg class="todd-hero" viewBox="0 0 80 80"><use href="#todd-face"/></svg>
+    <div class="eyebrow">Your Workout Accountant</div>
+    <h1>Say it.<br><em>Todd files it.</em></h1>
+    <p class="sub">No forms. No dropdowns. Just tell Todd what you did — "bench 3×10 at 185, then a 2-mile run" — and he keeps the books on your gains.</p>
+    <div class="hero-ctas" id="download">
+      <a class="btn big" href="#">&#63743; Download on the App Store</a>
+      <a class="btn big ghost" href="faq.html">Read the FAQ</a>
+    </div>
+
+    <div class="ledger reveal">
+      <div class="bubble"><span class="mic">&#9679;</span>"Bench press, 3 sets of 10 at 185… then ran 2 miles in 17 minutes, about 4,500 steps."</div>
+      <div class="ledger-card">
+        <div class="log-head">
+          <span class="log-title">Session</span>
+          <span class="log-date">Filed by Todd · Today</span>
+        </div>
+        <div class="exercise">
+          <div class="ex-name">Bench Press</div>
+          <div class="srow"><span class="sl">Set 1</span><span class="sv">185 lbs</span><span class="sv">10 reps</span></div>
+          <div class="srow"><span class="sl">Set 2</span><span class="sv">185 lbs</span><span class="sv">10 reps</span></div>
+          <div class="srow"><span class="sl">Set 3</span><span class="sv">185 lbs</span><span class="sv">10 reps</span></div>
+          <div class="srow"><span class="sl">Rest</span><span class="sv">2 min</span><span></span></div>
+        </div>
+        <div class="exercise">
+          <div class="ex-name">Run</div>
+          <div class="srow kv"><span class="sl">Total Distance</span><span class="sv">2 miles</span></div>
+          <div class="srow kv"><span class="sl">Total Duration</span><span class="sv">17 min</span></div>
+          <div class="srow kv"><span class="sl">Overall Pace</span><span class="sv">8:30/mile</span></div>
+          <div class="srow kv"><span class="sl">Steps</span><span class="sv">4,500</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section id="features">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="eyebrow">Features</div>
+      <h2>Everything, on the books.</h2>
+      <p>Todd is a simple guy. You do the work, he does the paperwork.</p>
+    </div>
+    <div class="grid">
+      <div class="feature reveal"><span class="ico">🎙️</span><h3>Log by voice or keyboard</h3><p>Speak or type your workout in plain English. Todd handles the numbers — sets, reps, weight, rest, time, distance, and steps.</p></div>
+      <div class="feature reveal"><span class="ico">🧾</span><h3>AI formatting</h3><p>Messy gym-speak in, clean structured logs out. Every workout is organized by exercise with tidy rows you can trust.</p></div>
+      <div class="feature reveal"><span class="ico">🎯</span><h3>Goals Todd can measure</h3><p>A 225 bench, a sub-5 mile, 100,000 steps this month, or "100 push-ups a day for 30 days" — with a streak calendar that fills in one green circle per day.</p></div>
+      <div class="feature reveal"><span class="ico">🔔</span><h3>Check-ins &amp; celebrations</h3><p>Todd is proud when you show up and a little queasy when you don't. Hit a goal and he throws you a proper celebration.</p></div>
+      <div class="feature reveal"><span class="ico">📈</span><h3>Trends that mean something</h3><p>Streaks, total volume, estimated one-rep maxes, a consistency heatmap, and per-exercise charts — including steps.</p></div>
+      <div class="feature reveal"><span class="ico">🔒</span><h3>Private by default</h3><p>Your workout data lives on your device. Todd only sends what's needed to format your entries — never for advertising.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="pricing">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="eyebrow">Pricing</div>
+      <h2>Simple books, simple prices.</h2>
+      <p>Free to try — your first workout logs are on Todd. Keep him on retainer after that.</p>
+    </div>
+    <div class="plans">
+      <div class="plan reveal">
+        <div class="period">Weekly</div>
+        <div class="price">$2.99</div>
+        <div class="per">per week</div>
+        <p class="note">Kick the tires. Todd charges by the week, no strings.</p>
+      </div>
+      <div class="plan best reveal">
+        <div class="badge">BEST VALUE</div>
+        <div class="period">Annual</div>
+        <div class="price">$49.99</div>
+        <div class="per">per year</div>
+        <p class="note">A full year of bookkeeping for less than a dollar a week.</p>
+      </div>
+      <div class="plan reveal">
+        <div class="period">Monthly</div>
+        <div class="price">$9.99</div>
+        <div class="per">per month</div>
+        <p class="note">The classic. Cancel anytime in your Apple ID settings.</p>
+      </div>
+    </div>
+    <p class="pricing-foot reveal">Auto-renewing subscriptions billed through the App Store. Cancel anytime, at least 24 hours before renewal.</p>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="eyebrow">FAQ</div>
+      <h2>Questions for the accountant.</h2>
+    </div>
+    <div class="faq-list reveal">
+      <div class="qa"><button>How does Todd log my workouts?</button><div class="a"><p>You speak or type your workout in plain English — "squats 5×5 at 225, then a 3-mile run." Todd's AI parses it into a clean, structured log with sets, reps, weight, rest, time, distance, and steps, organized by exercise. No forms, ever.</p></div></div>
+      <div class="qa"><button>What AI does Todd use?</button><div class="a"><p>Todd formats your entries with leading third-party AI models — primarily OpenAI's, with Anthropic's Claude as a fallback — routed through a secure server so no keys live on your phone. Voice is transcribed by Deepgram, with Apple's on-device Speech as backup. Your text is never used to train these models.</p></div></div>
+      <div class="qa"><button>Is my data private and secure?</button><div class="a"><p>Your workouts, goals, and profile are stored on your device. Only the text or audio needed to format an entry is sent for processing, and diagnostic logs are tied to a random device identifier — not your name. Full details in the <a href="privacy.html" style="color:var(--accent)">Privacy Policy</a>.</p></div></div>
+      <div class="qa"><button>How does the free trial work?</button><div class="a"><p>It's not a countdown timer — Todd is free to try for a limited number of workout logs. Log your first workouts free, and when you're ready to keep going, pick a plan. Your data stays either way.</p></div></div>
+      <div class="qa"><button>How do I cancel my subscription?</button><div class="a"><p>Through Apple: Settings → your name → Subscriptions → Todd → Cancel. Cancel at least 24 hours before your renewal date and you won't be charged again. Apple handles all billing and refunds.</p></div></div>
+      <div class="qa"><button>What happens to my data if I cancel?</button><div class="a"><p>Nothing dramatic — your logs live on your device, and you can keep viewing everything you've recorded. Logging new workouts with Todd's AI requires an active subscription.</p></div></div>
+      <div class="qa"><button>Can Todd make mistakes?</button><div class="a"><p>Occasionally, yes — he's an accountant, not a psychic. AI can misread an entry, which is why every workout is fully editable: just tell Todd what to fix ("make set 2 six reps") or edit it by hand. Todd is a formatting tool, not medical advice or a personal trainer.</p></div></div>
+      <div class="qa"><button>What types of workouts can Todd log?</button><div class="a"><p>Pretty much anything: weightlifting, running, swimming, cycling, rowing, walking (with steps), treadmill and machine cardio, yoga, HIIT and Tabata, boxing, circuits, climbing, jump rope, sports, stretching, dance, and more — around twenty categories, each with its own clean layout.</p></div></div>
+      <div class="qa"><button>Do I need an account?</button><div class="a"><p>No. There's no sign-up, no login, no password — you open Todd, tell him your name, and start logging. Your records belong to your device, not to an account on someone's server.</p></div></div>
+      <div class="qa"><button>Does Todd sync between devices?</button><div class="a"><p>Not currently — your data lives on the device where you logged it, which is exactly why it stays private. Cross-device sync is something we're considering for the future.</p></div></div>
+    </div>
+    <div class="faq-more reveal"><a href="faq.html">More questions, more answers →</a></div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <div>
+        <div class="brand"><svg viewBox="0 0 80 80"><use href="#todd-face"/></svg> Todd</div>
+        <div class="tag">Your workout accountant. The books don't lie.</div>
+      </div>
+      <div class="foot-links">
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="terms.html">Terms &amp; Conditions</a>
+        <a href="faq.html">FAQ</a>
+        <a href="mailto:toddlabs413@gmail.com">toddlabs413@gmail.com</a>
+      </div>
+    </div>
+    <div class="copyright">© 2026 Todd Labs. All rights reserved.</div>
+  </div>
+</footer>
+
+<script>
+  // Nav background on scroll
+  const nav = document.getElementById('nav');
+  addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 10), {passive:true});
+
+  // Scroll-reveal
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
+  }, {threshold:.12});
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  // FAQ accordion
+  document.querySelectorAll('.qa button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const qa = btn.parentElement;
+      const wasOpen = qa.classList.contains('open');
+      document.querySelectorAll('.qa.open').forEach(o => o.classList.remove('open'));
+      if (!wasOpen) qa.classList.add('open');
+    });
+  });
+</script>
+</body>
+</html>
