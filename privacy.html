@@ -90,7 +90,7 @@
 <header class="page">
   <div class="wrap">
     <h1>Privacy Policy</h1>
-    <div class="effective">Effective as of July 3, 2026</div>
+    <div class="effective">Effective as of July 23, 2026</div>
   </div>
 </header>
 
@@ -104,27 +104,20 @@
 
     <section class="doc">
       <h2>Information Collection and Use</h2>
-      <p>The Application collects information when you download and use it. This information may include information such as:</p>
-      <ul>
-        <li>Your device's Internet Protocol address (e.g. IP address)</li>
-        <li>The pages of the Application that you visit, the time and date of your visit, the time spent on those pages</li>
-        <li>The time spent on the Application</li>
-        <li>The operating system you use on your mobile device</li>
-      </ul>
-      <p>The Application does not gather precise information about the location of your mobile device.</p>
-      <p>The Application uses Artificial Intelligence (AI) technologies to enhance user experience and provide certain features. The AI components may process user data to deliver personalized content, recommendations, or automated functionalities. All AI processing is performed in accordance with this privacy policy and applicable laws. If you have questions about the AI features or data processing, please contact the Service Provider.</p>
-      <p>The Service Provider may use the information you provided to contact you from time to time to provide you with important information, required notices and marketing promotions.</p>
-      <p>For a better experience, while using the Application, the Service Provider may require you to provide us with certain personally identifiable information, including but not limited to First Name, Email, Usage Data, Fitness/Health Data. The information that the Service Provider request will be retained by them and used as described in this privacy policy.</p>
+      <p>Todd does not require an account or email address. You may choose to provide a name, fitness preferences, workout logs, goals, notes, edits, AI chat messages, and issue reports. Most of this information is stored only on your device.</p>
+      <p>When you use an AI assisted or voice feature, Todd sends the information needed to complete that request. Depending on the feature, this may include typed or spoken text, voice audio or transcripts, workout and goal details, notes, edit instructions, recent AI conversation context, and a limited set of relevant workout history and calculated goal progress for goal analysis. Todd uses this information to transcribe, format, edit, analyze, or troubleshoot the content you requested and, as described below, to operate usage limits, secure the service, prevent abuse, and improve reliability.</p>
+      <p>To operate and protect the service, Todd also processes a randomly generated installation identifier, request timestamps and types, success or failure status, usage and cost information, error details, model responses, final structured results, and purchase or subscription status. The installation identifier is hashed before it is stored in the backend and is not your name or email address. Network and service providers may also process your Internet Protocol address and basic device or connection information when requests are transmitted.</p>
+      <p>Todd does not collect precise location, track you across other companies' apps or websites, sell personal information, or use your information for advertising or marketing.</p>
     </section>
 
     <section class="doc">
       <h2>Local Data Storage</h2>
-      <p>Your workout logs, goals, profile information, and app preferences are stored locally on your device using Apple's SwiftData framework. This data remains on your device and is not uploaded to any remote server except when workout descriptions, goal entries, voice transcripts, or temporary voice audio are processed by trusted AI services for formatting and transcription. When those requests are processed, the text you submit and the AI's response may be retained in our secure backend for diagnostics, quality, and abuse prevention, associated with a randomly generated device identifier rather than your name. If you choose to submit an in-app issue report, the report text you provide and a copy of the related workout or goal are also sent to our secure backend to help us investigate and fix the problem, under the same randomly generated device identifier.</p>
+      <p>Your workout logs, goals, profile information, and app preferences are stored locally on your device using Apple's SwiftData framework. They leave your device only when you choose a feature that needs remote processing, such as AI assisted logging or editing, voice transcription, goal analysis, subscription verification, or issue reporting. Temporary audio files created on your device are deleted after the transcription request completes. Todd does not store raw voice audio in its own backend, but transcripts and related request records may be retained as described below. If you submit an issue report, the report text and a copy of the related workout or goal are sent to Todd's secure backend so the problem can be investigated.</p>
     </section>
 
     <section class="doc">
       <h2>Microphone and Voice Data</h2>
-      <p>The Application requests access to your device microphone solely to enable voice based workout logging. To convert your speech into a workout log, your voice audio is typically transmitted securely to a trusted third party transcription service (Deepgram); on device transcription using Apple's Speech Framework is used as a fallback. Voice audio is used only for transcription and diagnostic comparison, not advertising.</p>
+      <p>The Application requests microphone and speech recognition access only to provide voice input. When you use voice for workout logging or editing, goal creation or editing, or workout note creation or editing, audio may be transmitted securely to Deepgram for speech to text transcription. Apple's Speech framework may also process voice input as a fallback; Todd does not guarantee that Apple Speech processing occurs only on your device. Voice audio and transcripts are used to provide transcription, improve transcription reliability, diagnose failures, and protect the service, not for advertising.</p>
     </section>
 
     <section class="doc">
@@ -134,12 +127,12 @@
 
     <section class="doc">
       <h2>Third Party Access</h2>
-      <p>Certain user provided content, such as workout descriptions and goal entries, may be transmitted to trusted third party service providers as described in the Third Party Services section below. The Service Provider may share your information with third parties in the ways that are described in this privacy statement.</p>
+      <p>Todd transmits user provided content to service providers only when needed for a feature you choose, as described in the Third Party Services section below. Todd requires these providers to protect the data consistently with this policy. Their processing is governed by their service terms, privacy commitments, and Todd's account settings.</p>
       <p>The Service Provider may disclose User Provided and Automatically Collected Information:</p>
       <ul>
         <li>As required by law, such as to comply with a subpoena, or similar legal process;</li>
         <li>When they believe in good faith that disclosure is necessary to protect their rights, protect your safety or the safety of others, investigate fraud, or respond to a government request;</li>
-        <li>With their trusted services providers who work on their behalf, do not have an independent use of the information we disclose to them, and have agreed to adhere to the rules set forth in this privacy statement.</li>
+        <li>With trusted service providers that process information on Todd's behalf for the purposes described in this policy.</li>
       </ul>
     </section>
 
@@ -147,33 +140,33 @@
       <h2>Third Party Services</h2>
       <p>The Application uses the following third party services, each governed by its own privacy policy:</p>
       <ul>
-        <li>OpenAI (openai.com/policies/privacy-policy) and Anthropic (anthropic.com/privacy) — User workout descriptions and goal entries are sent via a secure Supabase proxy to third party AI models — primarily OpenAI, with Anthropic's Claude as a fallback — to format and structure entries. Text submitted through these APIs is not used to train the providers' models and is retained only briefly, if at all, for abuse monitoring.</li>
-        <li>Apple Speech Framework (apple.com/legal/privacy) — Voice input for workout logging may be transcribed locally on the user's device using Apple's built in Speech Framework.</li>
-        <li>Deepgram (deepgram.com/privacy) — Voice audio may be securely transmitted to Deepgram for speech to text transcription and transcription quality comparison.</li>
-        <li>RevenueCat (revenuecat.com/privacy) — Subscription billing and purchase verification is managed by RevenueCat. RevenueCat receives purchase confirmation and subscription status information.</li>
-        <li>Supabase (supabase.com/privacy) — Provides the secure API proxy that routes AI transcription and formatting requests. For diagnostics, quality, and abuse prevention, the text of your requests and the AI's responses may be logged here, associated with a randomly generated device identifier.</li>
+        <li><a href="https://openai.com/policies/privacy-policy" target="_blank" rel="noopener">OpenAI</a> — Todd's active AI features use OpenAI models through a secure Supabase proxy. Depending on the feature, OpenAI may receive workout and goal descriptions, voice transcripts, notes, edit instructions, recent AI conversation context, relevant workout history, and calculated goal progress to format, edit, or analyze the user's requested content. OpenAI handles API data under its published <a href="https://platform.openai.com/docs/models/default-usage-policies-by-endpoint" target="_blank" rel="noopener">API data controls and retention practices</a>.</li>
+        <li><a href="https://www.apple.com/legal/privacy/" target="_blank" rel="noopener">Apple Speech Framework</a> — Apple Speech may process voice input as a fallback when transcription is unavailable or incomplete. Processing may occur on device or through Apple services depending on device capabilities and settings.</li>
+        <li><a href="https://deepgram.com/privacy" target="_blank" rel="noopener">Deepgram</a> — Voice audio for workout logs and edits, goal creation and edits, and workout note creation and edits may be securely transmitted to Deepgram for speech to text transcription and transcription reliability. Deepgram handles audio under its customer data terms, privacy policy, and Todd's Deepgram account settings.</li>
+        <li><a href="https://www.revenuecat.com/privacy/" target="_blank" rel="noopener">RevenueCat</a> — Subscription billing and purchase verification is managed by RevenueCat. RevenueCat receives purchase history and subscription status information, which Todd and RevenueCat use to verify access, prevent fraud, and provide subscription analytics.</li>
+        <li><a href="https://supabase.com/privacy" target="_blank" rel="noopener">Supabase</a> — Provides the secure API proxy and backend records used to route AI and transcription requests, enforce usage limits, investigate errors, improve quality, and prevent abuse. Records may include submitted text, transcripts, model responses, final structured results, timestamps, request type, technical metadata, and a hashed installation identifier.</li>
       </ul>
     </section>
 
     <section class="doc">
       <h2>Subscription and Billing</h2>
       <p>The Application offers auto-renewing subscriptions processed through Apple's App Store. Payment is charged to your Apple ID at confirmation of purchase.</p>
-      <p>Subscriptions automatically renew unless cancelled at least 24 hours before the end of the current period. You can manage and cancel your subscription through your Apple ID Account Settings. No refunds will be provided for partial subscription periods. All refund requests are handled by Apple.</p>
+      <p>Subscriptions automatically renew unless cancelled at least 24 hours before the end of the current period. You can manage and cancel your subscription through your Apple ID Account Settings. Refund requests and eligibility are determined by Apple under its policies.</p>
     </section>
 
     <section class="doc">
       <h2>Opt-Out Rights</h2>
-      <p>You can stop all collection of information by the Application easily by uninstalling it. You may use the standard uninstall processes as may be available as part of your mobile device or via the mobile application marketplace or network.</p>
+      <p>You can avoid future AI or voice processing by not using those features, revoke microphone or speech recognition access in iPhone Settings, or stop all future use by uninstalling the Application. Disabling these permissions will prevent the related voice features from working. Uninstalling the Application removes its local data but does not automatically delete records already processed by Todd's backend or third party providers.</p>
     </section>
 
     <section class="doc">
       <h2>Data Retention Policy</h2>
-      <p>The Service Provider will retain User Provided data for as long as you use the Application and for a reasonable time thereafter. If you'd like them to delete User Provided Data that you have provided via the Application, please contact them at toddlabs413@gmail.com and they will respond in a reasonable time.</p>
+      <p>Local workout, goal, profile, note, and preference data remains on your device until you delete it or uninstall the Application. Temporary on-device voice recordings are deleted after the transcription request completes. Backend request records, including submitted text, transcripts, model responses, final results, and technical metadata, are retained only for as long as reasonably necessary to operate usage limits, diagnose and correct problems, improve service quality, prevent abuse, resolve issue reports, and meet legal obligations. Third party providers retain information according to their own policies and Todd's account settings.</p>
     </section>
 
     <section class="doc">
       <h2>Data Deletion</h2>
-      <p>If you would like to request deletion of your personal data please contact us at toddlabs413@gmail.com. We will respond within a reasonable time and delete your data as required by applicable law.</p>
+      <p>You can delete local data by deleting entries in the Application or uninstalling it. To request deletion of backend records that Todd can reasonably identify, contact <a href="mailto:toddlabs413@gmail.com">toddlabs413@gmail.com</a>. Because Todd does not require an account and backend records use a hashed installation identifier rather than your name or email, Todd may need additional details about the approximate date and type of your requests to locate the correct records. Todd will respond within a reasonable time and delete identifiable data as required by applicable law.</p>
     </section>
 
     <section class="doc">
@@ -194,7 +187,7 @@
 
     <section class="doc">
       <h2>Your Consent</h2>
-      <p>By using the Application, you are consenting to the processing of your information as set forth in this Privacy Policy now and as amended by us.</p>
+      <p>By agreeing to this Privacy Policy during onboarding and then choosing to use Todd's AI, voice, or subscription features, you consent to the processing and third party sharing described above, including processing by Supabase, OpenAI, Deepgram, Apple Speech, and RevenueCat. You can withdraw future microphone and speech access in iPhone Settings or stop using the AI and voice features, but withdrawing consent does not undo processing that already occurred.</p>
     </section>
 
     <section class="doc">
