@@ -16,9 +16,9 @@ Open `http://127.0.0.1:8769`. This is a local preview, not a deployment. Publish
 
 The homepage and FAQs focus on free manual workout logging and solo play: entering and editing workouts, reusable templates, units, Calendar/Trends, five game upgrade categories, up to three spendable points per day, one automatically saved solo game, earned coins, and local records. They do not promote unavailable modes or discuss retired AI entry. The three-point game reward allowance does not cap workout logging.
 
-Goal creation is now free without a daily or lifetime cap. Its subscription check, paywall, rate-limit banner, and counter increments have been removed from the app; old saved counter keys are left intact and ignored. Other subscription infrastructure and disclosures are outside that focused change. The three-point game reward allowance is unchanged.
+The legal documents describe the current Swole Streets release: free manual tracking and solo play, local records and widgets, optional Supabase issue reports, automatic RevenueCat purchase-status checks, disabled real-money catalog purchases, and the handling of older subscriptions and records. They do not advertise multiplayer as available. Goal creation has no daily or lifetime cap; the three-point game reward allowance is separate.
 
-`legal-content.json` is exported from `../Todd/Todd/LegalContent.swift`. The current app still calls itself Todd in these documents, so those words, the effective date, and the multiplayer disclosures are deliberately preserved verbatim. A note outside the document explains the new public name and multiplayer's current availability. Future legal rebranding should begin in the app's source, followed by a website sync.
+`legal-content.json` is exported from `../Todd/Todd/LegalContent.swift`, the source of truth for both legal documents and their effective date. Start legal changes there, then sync and validate this site. Todd Labs remains the operator and support contact; Swole Streets is the app name. The app repository's `LEGAL_REVIEW.md` records the code audit, research, and operational follow-ups that legal copy alone cannot resolve.
 
 On a Mac with Xcode's Swift toolchain:
 

@@ -87,7 +87,8 @@ def main():
     for name in ['privacy', 'terms']:
         assert pages[name + '.html'].legal == legal[name], (name, 'legal text mismatch')
         assert legal['effectiveDate'] in pages[name + '.html'].path.read_text()
-    print(f'PASS: {len(pages)} pages, {count} local links/assets, image dimensions, descriptions, headings, anchors, and all 33 legal sections.')
+    legal_count = sum(len(legal[name]) for name in ['privacy', 'terms'])
+    print(f'PASS: {len(pages)} pages, {count} local links/assets, image dimensions, descriptions, headings, anchors, and all {legal_count} legal sections.')
 
 
 if __name__ == '__main__':

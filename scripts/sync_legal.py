@@ -43,6 +43,9 @@ def render(sections):
     toc += '</nav></details>\n<div class="legal-copy">\n'
     for key, section in zip(ids, sections):
         paragraphs = ''.join('<p>' + html.escape(p) + '</p>' for p in section['body'].split('\n\n'))
+        # Link policy sources without changing the app's exact visible text.
+        paragraphs = re.sub(r'https://[^\s<>]+?(?=[.,]?(?:\s|&lt;|</p>|$))',
+                            lambda m: '<a href="' + m[0] + '">' + m[0] + '</a>', paragraphs)
         # Link the existing email without changing its visible text.
         paragraphs = paragraphs.replace('support@toddlabs.info', '<a href="mailto:support@toddlabs.info">support@toddlabs.info</a>')
         toc += f'<section class="legal-section" id="{key}"><h2>{html.escape(section["title"])}</h2>{paragraphs}</section>\n'
